@@ -55,10 +55,10 @@ function writeData(data){
 			if (err) throw err;
 			});
 
-      let output_testing = "public/testing.csv";
-      fs.appendFile(output_testing, csvData, (err) => {
-      if (err) throw err;
-      });
+      //let output_testing = "public/testing.csv";
+      //fs.appendFile(output_testing, csvData, (err) => {
+      //if (err) throw err;
+      //});
 	
 	}
 
