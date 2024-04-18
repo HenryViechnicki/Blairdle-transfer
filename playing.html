@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!--<link rel="stylesheet" href="style.css">-->
+	<meta charset="utf-8">
+	<title>Playing Page</title>
+</head>
+
+<body>	
+	<h1>Welcome to the playing page</h1>
+
+	<h1>HTML Geolocation</h1>
+	<p>Click the button to get your coordinates.</p>
+
+	<button id="locationGPS" onclick="getLocation()">Try It</button>
+
+	<p id="demo"></p>
+	<p>Your location rn: </p>
+  <!--<iframe src="https://mapping.thexs.app/map.html?host=mexs&fid=6a123bf2b2cbd1339334a4587263c540384dfbdf58b675b790f6e5d0364c2933/1w2w5LCvP-NwWQ_HHx-gTzjIMjOrlrVL3" width="600" height="600"></iframe>-->
+  <iframe src="https://mapping.thexs.app/map.html?fid=1DiRYv0XncUOQfh98-vgtNJ5PVZicA5cK&fn=more-testing.sheet1.0.json" width="600" height="600"></iframe>
+	
+	<form>
+		<input type="text" id="location" name="firstName">
+
+		<!--<input type="text" name="lastName">-->
+
+		
+		<button type="submit">Submit</button>
+	</form>
+
+
+	<script>
+
+
+		function myFunction(latData, longData) {
+			//var table = document.getElementById("testTable");
+			//var row = table.insertRow(0);
+			//var cell1 = row.insertCell(0);
+			//var cell2 = row.insertCell(1);
+			//cell1.innerHTML = latData;
+			//cell2.innerHTML = longData;
+		}
+
+	//const fs = require('fs');
+	const x = document.getElementById("demo");
+
+	function getLocation() {
+		let data = "test case";
+		//fs.writeFile('userData.txt', data, (err) => {if (err) throw err;});
+		if (navigator.geolocation) {
+			navigator.geolocation.watchPosition(showPosition, showError);
+		} else { 
+			x.innerHTML = "Geolocation is not supported by this browser.";
+		}
+		
+		return x.innerHTML;
+		
+	}
+
+	function showPosition(position) {
+		x.innerHTML = "Latitude: " + position.coords.latitude + 
+		" Longitude: " + position.coords.longitude;
+		myFunction(position.coords.latitude, position.coords.longitude)
+	}
+
+	function showError(error) {
+		switch(error.code) {
+			case error.PERMISSION_DENIED:
+				x.innerHTML = "User denied the request for Geolocation."
+				break;
+			case error.POSITION_UNAVAILABLE:
+				x.innerHTML = "Location information is unavailable."
+				break;
+			case error.TIMEOUT:
+				x.innerHTML = "The request to get user location timed out."
+				break;
+			case error.UNKNOWN_ERROR:
+				x.innerHTML = "An unknown error occurred."
+				break;
+		}
+	}
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		//console.log('Hello');
+		//sleep(2000).then(() => { console.log('World!'); });
+
+		const form = document.querySelector('form');
+		form.addEventListener('submit', (e) => {
+			console.log("submitted!");
+			e.preventDefault(); //Prevent HTML Submission
+			getLocation();
+			//getLocation();
+			//const name = document.getElementById('locationGPS').value;
+			//const locationData = x.innerHTML;
+			//const urlEncoded = new encodeURIComponent(locationData).toString();
+			alert("You have 7 seconds and one millisecond to get away!");
+			console.log("run1)")
+			sleep(7001).then(() => {  
+			
+			
+			const relativePath = window.location.pathname;
+			console.log(`Relative path: ${relativePath}`);
+			const fd = new FormData(form);
+	
+			let locationData = getLocation();
+			//sleep(3000).then(() => {
+			console.log(locationData);
+			fd.append("location", locationData) //probably should be something else, this adds the location data to the form (it's hitching a ride)
+      console.log(JSON.stringify(fd))
+      const urlEncoded = new URLSearchParams(fd).toString();
+      console.log(urlEncoded)
+			//const urlEncoded = new URLSearchParams(fd).toString();
+			fetch('https://dc541871-76d6-4cfb-a942-11f04d0222b7-00-3smy660ryt1on.janeway.replit.dev/upload',{
+				mode: 'cors',
+				method: 'POST',
+				body: urlEncoded, 
+				headers: {
+					'Content-type': 'application/x-www-form-urlencoded',
+					
+				}
+			})
+			//})
+			});
+		})
+	</script>
+</body>
+
+</html>
